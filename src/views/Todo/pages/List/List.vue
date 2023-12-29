@@ -1,5 +1,6 @@
 <template>
     <Lists></Lists>
+    <div>{{ dataUser }}</div>
 </template>
 
 <script>
@@ -10,11 +11,15 @@ export default {
     components: {
         Lists
     },
+    props: ['param'],
     data(){
         return {
             
         }
     },
+    mounted(){
+        console.log(this.param);
+    }
 }
 
 </script>

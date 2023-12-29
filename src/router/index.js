@@ -4,7 +4,8 @@ import SignUp from '../views/Todo/pages/SignUp.vue';
 import ResetPassword from '../views/Todo/pages/ResetPassword.vue'
 import Welcome from '../views/Todo/pages/Welcome.vue';
 import Todo from '../views/Todo/Todo.vue';
-import List from '../views/Todo/pages/List/List.vue'
+import List from '../views/Todo/pages/List/List.vue';
+import Settings from '../views/Todo/pages/Settings.vue';
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
         path: 'list',
         name: 'list',
         component: List
+      },
+      {
+        path: 'settings',
+        name: 'settings',
+        component: Settings
       },
     ]
   },

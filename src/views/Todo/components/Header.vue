@@ -10,7 +10,7 @@
             <nav class="ToDo__header-navigation">
                 <ul class="ToDo__header-navigation-list">
                     <li class="ToDo__header-navigation-list-item">Список</li>
-                    <li class="ToDo__header-navigation-list-item">Настройки</li>
+                    <li class="ToDo__header-navigation-list-item"><router-link to="settings/">Настройки</router-link></li>
                     <li class="ToDo__header-navigation-list-item">Сменить аккаунт</li>
                 </ul>
             </nav>

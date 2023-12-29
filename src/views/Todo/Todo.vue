@@ -1,6 +1,8 @@
 <template>
     <Header :userName="$route.params.userName"></Header>
-    <router-view></router-view>
+    <router-view v-slot="{Component}">
+        <component :is="Component" :param="'pupa'"></component>
+    </router-view>
 </template>
 
 <!-- <ul>
@@ -9,9 +11,11 @@
 
 <script>
 import Header from '../Todo/components/Header.vue';
+import List from './pages/List/List.vue'
 export default {
     components: {
-        Header
+        Header,
+        List
     },
     data() {
         return {
@@ -20,7 +24,6 @@ export default {
                 '1': {
                     lists: [
                         "Домашние дела",
-
                     ],
                     tasks: [
                         {
