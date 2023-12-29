@@ -5,66 +5,15 @@
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Rubik+Bubbles&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+@import "./views/Todo/Todo.scss";
 
 $main-color-green : rgb(65, 184, 131);
 $main-color-blue : rgb(53, 73, 94);
 $main-color-white : rgb(255, 255, 255);
 $main-color-black : rgb(0, 0, 0);
 
-// reset styles
-* {
-  padding: 0;
-  margin: 0;
-  border: 0;
-}
-*,*:before,*:after {
-  box-sizing: border-box;
-}
-:focus,:active {
-  outline: none;
-}
-a:focus,a:active {
-  outline: none;
-}
-nav,footer,header,aside {
-  display: block;
-}
-html,body {
-  height: 100%;
-  width: 100%;
-  font-style: 100%;
-  line-height: 1;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-}
-input,button,textarea {
-  font-family: inherit;
-}
-input::-ms-clear {
-  display: none;
-}
-button {
-  cursor: pointer;
-}
-button::-moz-focus-inner {
-  padding: 0;
-  border: 0;
-}
-a,a:visited {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: none;
-}
-ul li {
-  list-style: none;
-}
-img {
-  vertical-align: top;
-}
-h1,h2,h3,h4,h5,h6 {
-  font-size: inherit;
-  font-weight: 400;
+body{
+  background: rgb(65, 184, 131);
 }
 </style>
+
