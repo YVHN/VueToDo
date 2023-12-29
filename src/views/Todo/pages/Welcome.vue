@@ -14,7 +14,7 @@
         &__heading{
             font-size: 40px;
             font-weight: 700;
-            margin: 60px 0px;
+            padding: 60px 0px;
         }
         &__text{
             padding: 40px 0px;
