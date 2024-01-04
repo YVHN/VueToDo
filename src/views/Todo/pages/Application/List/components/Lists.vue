@@ -1,6 +1,10 @@
 <template>
     <div class="lists">
         <p class="lists__heading">Списки</p>
+        <div class="lists__line"></div>
+        <div class="lists__list-item" :key="filter.id" v-for="filter in filterList" @click="addFilter(filter.id)">
+          {{ filter.name }}
+        </div>
         <!-- <div class="lists__list">
             <div class="lists__list-item" 
             v-for="list in getDefaultLists"
@@ -42,6 +46,20 @@
                 newListName: "",
                 currentList: "",
                 firstlistId: 2,
+                filterList: [
+                    {
+                        name: " Все задачи",
+                        id: 'ALL'
+                    },
+                    {
+                        name: "completed",
+                        id: 'completed'
+                    },
+                    {
+                        name: "important",
+                        id: 'important'
+                    },
+                ],
             }
         },
         methods: {
@@ -63,6 +81,9 @@
                 deletedList.tasks.splice(0, deletedList.length)
                 this.$store.commit('deleteList', deletedList);
                 this.currentList = "";
+            },
+            addFilter(filter) {
+                this.$store.commit('setFilterList', filter);
             },
             chooseList(list){
                 this.$store.commit('chooseList', list.name);

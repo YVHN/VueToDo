@@ -6,6 +6,7 @@ const store = createStore({
             currentList: "Задачи",
             currentListName: "Задачи",
             userData: [],
+            filters: '',
             completed: "",
             important: "",
         }
@@ -14,6 +15,9 @@ const store = createStore({
         // Получение массив листов
         chooseList(state, payload){
             state.currentListName = payload;
+        },
+        setFilterList(state, payload) {
+            state.filters = payload;
         },
         // Удаление / добавление списка
         addList(state, payload){
@@ -46,6 +50,9 @@ const store = createStore({
     getters: {
         getUserData(state){
             return state.userData;
+        },
+        getFiltres(state) {
+            return state.filters
         },
         getList(state){
             const currentList = state.userData.find(userDataItem => userDataItem.name === state.currentListName);

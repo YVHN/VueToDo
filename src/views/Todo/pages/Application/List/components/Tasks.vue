@@ -1,23 +1,11 @@
 <template>
     <div class="tasks">
         <div class="tasks__list-name">{{ getList.name }}</div>
-        <div class="tasks__list">
-            <div class="tasks__list-item" v-for="task in this.$store.state.allTasks" :key="task.id">
-                <div class="tasks__list-item-wrapper">
-                    <input type="checkbox" name="" id="" class="tasks__list-item-status" @click="task.completed = !task.completed">
-                    <p class="tasks__list-item-text">{{ task.name }}</p>
-                </div>
-                <img src="../assets/icons/cancel.svg" alt="" class="tasks__list-item-delete" @click="deleteTask(task)">
-            </div>
+        <div class="tasks__list" v-if="getFiltres">
+            <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
         </div>
-        <div class="tasks__list">
-            <div class="tasks__list-item" v-for="task in getList.tasks" :key="task.id">
-                <div class="tasks__list-item-wrapper">
-                    <input type="checkbox" name="" id="" class="tasks__list-item-status" @click="task.completed = !task.completed">
-                    <p class="tasks__list-item-text">{{ task.name }}</p>
-                </div>
-                <img src="../assets/icons/cancel.svg" alt="" class="tasks__list-item-delete" @click="deleteTask(task)">
-            </div>
+        <div class="tasks__list" v-else>
+            <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" />
         </div>
         <div class="tasks__add-task">
             <input type="text" class="tasks__add-task-input" placeholder="Добавить задачу" v-model="newTaskName"
@@ -28,7 +16,11 @@
 </template>
 
 <script>
+import TaskItem from './TaskItem'
 export default {
+    components: {
+        TaskItem,
+    },
     data() {
         return {
             newTaskName: "",
@@ -51,10 +43,37 @@ export default {
             this.$store.commit('deleteTask', deleted);
         },
     },
+    watch: {
+        filteredTasks(val) {
+            console.log(val)
+            console.log(this.allTasks)
+            console.log(this.getFiltres)
+        }
+    },
     computed: {
         getList(){
             return this.$store.getters.getList;
-        }
+        },
+        allTasks() {
+            let list = [];
+            this.getUserData.forEach(element => {
+                list = [...list, ...element.tasks]
+            });
+            return list;
+        },
+        filteredTasks() {
+            if(this.getFiltres === 'ALL') {
+                return this.allTasks;
+            }
+            const result = this.allTasks;
+            return result.filter(item => item[this.getFiltres])
+        },
+        getFiltres(){
+            return this.$store.getters.getFiltres;
+        },
+        getUserData(){
+            return this.$store.getters.getUserData;
+        },
     },
 
 }
