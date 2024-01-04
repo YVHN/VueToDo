@@ -1,10 +1,19 @@
 <template>
     <div class="tasks">
-        <div class="tasks__list-name">{{ currentListName }}</div>
-        <div class="tasks__list" v-if="updateTasks">
-            <div class="tasks__list-item" v-for="task in tasks" :key="task.id">
+        <div class="tasks__list-name">{{ getList.name }}</div>
+        <div class="tasks__list">
+            <div class="tasks__list-item" v-for="task in this.$store.state.allTasks" :key="task.id">
                 <div class="tasks__list-item-wrapper">
-                    <input type="checkbox" name="" id="" class="tasks__list-item-status" @click="task.status = !task.status">
+                    <input type="checkbox" name="" id="" class="tasks__list-item-status" @click="task.completed = !task.completed">
+                    <p class="tasks__list-item-text">{{ task.name }}</p>
+                </div>
+                <img src="../assets/icons/cancel.svg" alt="" class="tasks__list-item-delete" @click="deleteTask(task)">
+            </div>
+        </div>
+        <div class="tasks__list">
+            <div class="tasks__list-item" v-for="task in getList.tasks" :key="task.id">
+                <div class="tasks__list-item-wrapper">
+                    <input type="checkbox" name="" id="" class="tasks__list-item-status" @click="task.completed = !task.completed">
                     <p class="tasks__list-item-text">{{ task.name }}</p>
                 </div>
                 <img src="../assets/icons/cancel.svg" alt="" class="tasks__list-item-delete" @click="deleteTask(task)">
@@ -20,49 +29,33 @@
 
 <script>
 export default {
-    props: ['userTasks'],
     data() {
         return {
             newTaskName: "",
-            currentListName: "",
             tasks: "",
+            taskId : 0,
         }
     },
     methods: {
         addTask() {
             const newTask = {
-                id: this.tasks.length + 1,
+                id: this.taskId + 1,
                 name: this.newTaskName,
-                status: false,
+                important: false,
+                completed: false,
             }
-            this.tasks.push(newTask);
+            this.$store.commit('addTask', newTask);
             this.newTaskName = "";
-            if (this.userTasks.length > 0) {
-                console.log(this.userTasks);
-            } else {
-                console.log("Пока пусто")
-            }
         },
         deleteTask(deleted) {
-            const filtered = this.tasks.filter(task => task.id != deleted.id);
-            console.log(filtered);
-            this.tasks = filtered;
+            this.$store.commit('deleteTask', deleted);
         },
-        addTaskToCompleted(task){
-            console.log("Таска отправлена");
-            this.$emit('addTaskToCompleted', task);
-        }
     },
     computed: {
-        updateTasks() {
-            if (this.userTasks) {
-                console.log("Список принят");
-                this.tasks = this.userTasks['tasks'];
-                this.currentListName = this.userTasks.name;
-                return this.userTasks;
-            }
+        getList(){
+            return this.$store.getters.getList;
         }
-    }
+    },
 
 }
 </script>
@@ -76,7 +69,7 @@ export default {
     background: url('../assets/img/background.jpg') no-repeat;
     background-size: cover;
     height: auto;
-    width: 66%;
+    width: 100%;
 
     &__list-name {
         color: rgb(65, 184, 131);

@@ -1,17 +1,17 @@
 <template>
     <div class="ToDo">
         <div class="ToDo__header">
-            <img class="ToDo__header-logo" src="../assets/logo/logo.svg" />
-            <p class="ToDo__header-welcome">{{ `С возвращением, ${currentUser}!` }}</p>
+            <img class="ToDo__header-logo" src="../../../assets/logo/logo.svg" />
+            <p class="ToDo__header-welcome">{{ `С возвращением, ${this.$route.params.user}!` }}</p>
             <div class="ToDo__header-search">
                 <input type="text" class="ToDo__header-search-input">
-                <img src="../assets/icons/search.svg" alt="search" class="ToDo__header-search-icon">
+                <img src="./assets/icons/search.svg" alt="search" class="ToDo__header-search-icon">
             </div>
             <nav class="ToDo__header-navigation">
                 <ul class="ToDo__header-navigation-list">
-                    <li class="ToDo__header-navigation-list-item">Список</li>
-                    <li class="ToDo__header-navigation-list-item"><router-link to="settings/">Настройки</router-link></li>
-                    <li class="ToDo__header-navigation-list-item">Сменить аккаунт</li>
+                    <li><router-link to="list" class="ToDo__header-navigation-list-item">Список</router-link></li>
+                    <li><router-link to="settings" class="ToDo__header-navigation-list-item">Настройки</router-link></li>
+                    <li><router-link to="/todo/login" class="ToDo__header-navigation-list-item">Сменить аккаунт</router-link></li>
                 </ul>
             </nav>
         </div>
@@ -19,18 +19,6 @@
 </template>
 
 <script>
-export default {
-    name: "Header",
-    props: ['userName'],
-    data(){
-        return {
-            currentUser: this.userName,
-        }
-    },
-    mounted(){
-        
-    }
-}
 </script>
 
 <style lang="scss">
@@ -86,6 +74,9 @@ export default {
                     font-size: 24px;
                     color: white;
                     cursor: pointer;
+                    &>router-link{
+                        color: white;
+                    }
 
                     &:hover {
                         color: rgb(65, 184, 131);

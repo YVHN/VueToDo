@@ -1,23 +1,22 @@
 <template>
     <div class="lists">
         <p class="lists__heading">Списки</p>
-        <!-- Стандартные списки -->
-        <div class="lists__list">
+        <!-- <div class="lists__list">
             <div class="lists__list-item" 
-            v-for="list in defaultLists"
+            v-for="list in getDefaultLists"
             :key="list.id"
-            @click="currentList = list.name, sendCurrentListName()"
+            @click="currentList = list.name, chooseList(currentList)"
             :class="{active: currentList === list.name}">
-            <!-- <img :src="require(`${list.img}`)" alt="" class="lists__list-item-icon"> -->
+            <img :src="require(`${list.img}`)" alt="" class="lists__list-item-icon">
             <span class="lists__list-item-text">{{ list.name }}</span></div>
-        </div>
+        </div> -->
         <div class="lists__line"></div>
         <!-- Пользователськие списки -->
         <div class="lists__list">
             <div class="lists__list-item" 
-            v-for="list in customLists"
+            v-for="list in getUserData"
             :key="list.id"
-            @click="currentList = list.name, sendCurrentListName()"
+            @click="currentList = list.name, chooseList(list)"
             :class="{active: currentList === list.name}"><span class="lists__list-item-text">{{ list.name }}</span>
             <img src="../assets/icons/cancel.svg" alt="" 
             class="lists__list-item-delete"
@@ -37,57 +36,44 @@
 
 <script>
     export default {
-        props: ['userLists'],
         data(){
             return {
-                // получение стандартных списков пользователя
-                defaultLists: this.userLists['lists'],
                 // получение пользовательских списков
-                customLists: this.userLists['userLists'],
                 newListName: "",
                 currentList: "",
-                listId: 2,
+                firstlistId: 2,
             }
-        },
-        mounted(){
-            
         },
         methods: {
             // добавление списка
             addList() {
                 if(this.newListName){
-                    this.listId += 1;
+                    this.firstlistId += 1;
                     const newList = {
-                        id: this.listId,
+                        id: this.firstlistId,
                         name: this.newListName,
                         tasks: [],
                     }
-                    console.log("Снизу список")
-                    this.customLists.push(newList);
-                    console.log(newList);
-                    console.log(this.customLists);
+                    this.$store.commit('addList', newList);
                     this.newListName = "";
-                    this.updateListsData();
                 }
             },
             // удаление списка
             deleteList(deletedList){
-                const filtered = this.customLists.filter(list => list.name != deletedList.name );
-                deletedList['tasks'].splice(0, deletedList['tasks'].length);
-                this.customLists = filtered;
+                deletedList.tasks.splice(0, deletedList.length)
+                this.$store.commit('deleteList', deletedList);
                 this.currentList = "";
             },
-            // передача имени списка родителю
-            sendCurrentListName(){
-                console.log("То, что я отправляю");
-                console.log(this.currentList);
-                this.$emit('getListName', this.currentList);
+            chooseList(list){
+                this.$store.commit('chooseList', list);
             },
-            updateListsData(){
-                console.log("Новый список отправлен")
-                this.$emit('updateLists', this.customLists);
+        },
+        computed: {
+            getUserData(){
+            return this.$store.getters.getUserData;
             }
         },
+        
     }
 </script>
 

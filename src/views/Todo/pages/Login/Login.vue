@@ -4,52 +4,63 @@
         <div class="login__body">
             <p class="login__body-heading">Войдите в аккаунт</p>
             <div class="login__body-form">
+                <!-- Имя -->
                 <div class="login__body-form-label">Nickname</div>
                 <div class="login__body-form-input-wrapper">
-                    <input type="text" class="login__body-form-input" v-model="userNickname" :class="inputStatus"
-                        @input="checkName(userNickname)" @keyup.enter="submit">
+                    <input type="text" class="login__body-form-input" 
+                    v-model="enteredNickname" 
+                    :class="inputStatus"
+                    @keyup="checkNameInput">
                     <div class="login__body-form-line"></div>
                     <img src="./assets/icons/user.svg" alt="icon" class="login__body-form-icon">
                     <p class="login__body-form-input-prevention" v-show="incorrectName">Имя должно быть от 3 до 16 символов
                     </p>
                 </div>
             </div>
+            <!-- Сброс пароля -->
             <router-link to="/todo/reset-password" class="login__body-reset-password">Забыли пароль?</router-link>
             <div class="login__body-form">
+                <!-- Пароль -->
                 <div class="login__body-form-label">Password</div>
                 <div class="login__body-form-input-wrapper">
-                    <input type="password" class="login__body-form-input" v-model="userPassword" @keyup.enter="submit">
+                    <input type="password" 
+                    class="login__body-form-input"
+                    v-model="enteredPassword">
                     <div class="login__body-form-line"></div>
                     <img src="./assets/icons/password.svg" alt="icon" class="login__body-form-icon">
                 </div>
             </div>
             <div class="login__body-actions">
+                <!-- Кнопка вхлда -->
                 <button class="login__body-actions-login" @click="submit">Войти<component :is="enterIcon"></component>
                 </button>
+                <!-- Регистрация -->
                 <router-link to="/todo/sign-up" class="login__body-actions-create-account">Нет аккаунта ?</router-link>
             </div>
-            <p class="login__body-data-prevention" v-show="incorrectData">Неверное имя пользователя или пароль</p>
+            <p class="login__body-data-prevention" v-if="failure">Неверное имя пользователя или пароль</p>
         </div>
     </div>
 </template>
 
 <script>
-import enter from "./assets/icons/enter.vue"
+import enter from "./assets/icons/enter.vue";
 export default {
     name: "Login",
     data() {
         return {
+            // Введённые данные
+            enteredPassword: "",
+            enteredNickname: "",
+            // Иконка
             enterIcon: enter,
-            userNickname: "",
-            userId: "",
-            userPassword: "",
-            error: false,
+            // Статусы полей
             inputStatus: {
-                wrong: false,
                 correct: false,
+                wrong: false,
             },
-            incorrectName: false,
-            incorrectData: false,
+            // Статус входа
+            failure : "",
+            // База пользователей
             users: [
                 {
                     id: 1,
@@ -66,39 +77,43 @@ export default {
                     name: "Yevhen",
                     password: "Superpuper13"
                 },
-            ]
+            ],
+            // Текущий пользователь
+            currentUser: "",
         }
     },
     methods: {
-        checkName(name) {
+        checkNameInput() {
+            const name = this.enteredNickname;
             if (name.length > 2 && name.length < 16) {
                 this.inputStatus.correct = true;
                 this.inputStatus.wrong = false
-                this.incorrectName = false;
             } else {
                 this.inputStatus.correct = false;
                 this.inputStatus.wrong = true;
-                this.incorrectName = true;
             }
         },
         submit() {
-            let status = false;
-            this.users.forEach(item => {
-                if (item.name == this.userNickname && item.password == this.userPassword) {
+            let status = "";
+            this.users.forEach(user => {
+                if (user.name == this.enteredNickname && user.password == this.enteredPassword) {
+                    this.currentUser = user;
                     status = true;
-                    this.userId = item.id;
                 }
             });
             if (status) {
-                this.incorrectData = false;
-                this.$router.push(`/todo/${this.userId}/${this.userNickname}/list`);
+                this.failure = false;
+                this.getUserId();
+                this.$router.push(`/todo/app/${this.currentUser.id}/${(this.enteredNickname).toLocaleLowerCase()}/list`);
             } else {
-                this.incorrectData = true;
+                this.failure = true;
             }
-
+        },
+        getUserId(){
+            this.$emit('getId', this.currentUser.id)
         }
-    }
-
+    },
+    
 }
 </script>
 
