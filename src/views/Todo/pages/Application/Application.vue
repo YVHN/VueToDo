@@ -34,7 +34,14 @@ export default {
                             id: 1,
                             name: "Задачи",
                             img: "../assets/icons/completed.svg",
-                            tasks: []
+                            tasks: [
+                            {
+                                    id: 1,
+                                    name: "Помочь начальнику",
+                                    important: true,
+                                    completed: false,
+                                },
+                            ]
                         },
                         {
                             id: 2,

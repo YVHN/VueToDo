@@ -65,7 +65,7 @@
                 this.currentList = "";
             },
             chooseList(list){
-                this.$store.commit('chooseList', list);
+                this.$store.commit('chooseList', list.name);
             },
         },
         computed: {

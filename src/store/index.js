@@ -4,7 +4,8 @@ const store = createStore({
     state() {
         return {
             currentList: "Задачи",
-            userData: "",
+            currentListName: "Задачи",
+            userData: [],
             completed: "",
             important: "",
         }
@@ -12,11 +13,13 @@ const store = createStore({
     mutations: {
         // Получение массив листов
         chooseList(state, payload){
-            state.currentList = payload;
+            state.currentListName = payload;
         },
         // Удаление / добавление списка
         addList(state, payload){
-            state.userData.push(payload);
+            const clone = Object.assign({}, state.userData)
+            clone.push(payload);
+            state.userData = clone;
         },
         deleteList(state, payload){
             const filtered = state.userData.filter(list => list.name != payload.name);
@@ -45,7 +48,8 @@ const store = createStore({
             return state.userData;
         },
         getList(state){
-            return state.currentList;
+            const currentList = state.userData.find(userDataItem => userDataItem.name === state.currentListName);
+            return currentList || {};
         }
     }
 });
