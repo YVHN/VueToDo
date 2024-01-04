@@ -7,6 +7,7 @@ const store = createStore({
             userData: "",
             completed: "",
             important: "",
+              
         }
     },
     mutations: {
