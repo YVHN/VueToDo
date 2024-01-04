@@ -22,6 +22,14 @@ export default {
     },
     methods: {
     },
+    watch: {
+        getUserData: {
+            handler(val) {
+                console.log(val)
+            },
+            deep: true,
+        }
+    },
     
     computed : {
         getUserData(){
