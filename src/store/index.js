@@ -9,6 +9,7 @@ const store = createStore({
             filters: '',
             completed: "",
             important: "",
+              
         }
     },
     mutations: {
