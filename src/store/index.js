@@ -6,9 +6,9 @@ const store = createStore({
             currentList: "Задачи",
             currentListName: "Задачи",
             userData: [],
+            allTasks: "",
             completed: "",
             important: "",
-              
         }
     },
     mutations: {
