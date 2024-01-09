@@ -1,22 +1,23 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-// Welcome
-import Welcome from '../views/Todo/pages/Welcome.vue';
-// User sign in
-import Login from '../views/Todo/pages/Login/Login.vue';
-import SignUp from '../views/Todo/pages/SignUp.vue';
-import ResetPassword from '../views/Todo/pages/ResetPassword.vue';
-// ToDo
-import Todo from '../views/Todo/Todo.vue';
+
 // App
 import App from '../views/Todo/pages/Application/Application.vue'
 // App components
 import List from '../views/Todo/pages/Application/List/List.vue';
+// User sign in
+import Login from '../views/Todo/pages/Login/Login.vue';
+import ResetPassword from '../views/Todo/pages/ResetPassword.vue';
+import SignUp from '../views/Todo/pages/SignUp.vue';
+// ToDo
+import Todo from '../views/Todo/Todo.vue';
+// Welcome
+import Welcome from '../views/Todo/pages/Welcome.vue';
 
 const routes = [
   {
 
     path: '/',
-    name: 'welcome',
+    name: 'welcome', 
     component: Welcome
   },
   {
