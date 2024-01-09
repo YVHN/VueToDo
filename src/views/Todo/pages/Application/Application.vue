@@ -50,7 +50,7 @@ export default {
                                 {
                                     id: 1,
                                     name: "Помочь начальнику",
-                                    important: true,
+                                    important: false,
                                     completed: false,
                                 },
                                 {
@@ -68,14 +68,14 @@ export default {
                                 {
                                     id: 1,
                                     name: "Помыть полы",
-                                    important: true,
+                                    important: false,
                                     completed: false,
                                 },
                                 {
                                     id: 2,
                                     name: "Погулять с собакой",
                                     important: true,
-                                    completed: false,
+                                    completed: true,
                                 }
                             ]
                         },
