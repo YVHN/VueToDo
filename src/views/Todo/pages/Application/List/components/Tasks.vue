@@ -54,6 +54,7 @@ export default {
         getList(){
             return this.$store.getters.getList;
         },
+        
         allTasks() {
             let list = [];
             this.getUserData.forEach(element => {
