@@ -7,10 +7,8 @@
                 <!-- Имя -->
                 <div class="login__body-form-label">Nickname</div>
                 <div class="login__body-form-input-wrapper">
-                    <input type="text" class="login__body-form-input" 
-                    v-model="enteredNickname" 
-                    :class="inputStatus"
-                    @keyup="checkNameInput">
+                    <input type="text" class="login__body-form-input" tabindex="1" v-model="enteredNickname"
+                        :class="inputStatus" @input="checkNameInput">
                     <div class="login__body-form-line"></div>
                     <img src="./assets/icons/user.svg" alt="icon" class="login__body-form-icon">
                     <p class="login__body-form-input-prevention" v-show="incorrectName">Имя должно быть от 3 до 16 символов
@@ -23,9 +21,8 @@
                 <!-- Пароль -->
                 <div class="login__body-form-label">Password</div>
                 <div class="login__body-form-input-wrapper">
-                    <input type="password" 
-                    class="login__body-form-input"
-                    v-model="enteredPassword">
+                    <input type="password" tabindex="2" class="login__body-form-input" v-model="enteredPassword"
+                        @keyup.enter="submit">
                     <div class="login__body-form-line"></div>
                     <img src="./assets/icons/password.svg" alt="icon" class="login__body-form-icon">
                 </div>
@@ -59,7 +56,7 @@ export default {
                 wrong: false,
             },
             // Статус входа
-            failure : "",
+            failure: "",
             // База пользователей
             users: [
                 {
@@ -109,11 +106,11 @@ export default {
                 this.failure = true;
             }
         },
-        getUserId(){
+        getUserId() {
             this.$emit('getId', this.currentUser.id)
         }
     },
-    
+
 }
 </script>
 
@@ -124,6 +121,13 @@ export default {
 
     &__logo {
         margin-top: 120px;
+        width: 250px;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.2);
+        }
     }
 
     &__body {
@@ -132,7 +136,7 @@ export default {
         height: 400px;
         border-radius: 20px;
         padding: 40px 50px 25px 50px;
-        background: rgb(53, 73, 94);
+        background: rgb(0, 93, 129);
         position: absolute;
         top: 50%;
         right: 50%;
@@ -188,7 +192,7 @@ export default {
             &-input {
                 width: 100%;
                 color: white;
-                background: #1E1E1E;
+                background: #00364b;
                 border-radius: 10px;
                 box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25) inset;
                 height: 50px;
@@ -200,13 +204,22 @@ export default {
         }
 
         &-reset-password {
-            color: #41B883;
+            color: white;
             font-size: 18px;
             font-weight: 400;
             text-decoration: underline;
+            padding: 7px;
             position: absolute;
             right: 50px;
-            top: 210px;
+            top: 200px;
+            border-radius: 10px;
+            transition: background 0.2s ease-in-out;
+
+            &:hover {
+                background: rgb(0, 121, 129);
+                color: rgb(0, 255, 200);
+                text-decoration: none;
+            }
         }
 
         &-actions {
@@ -224,14 +237,16 @@ export default {
                 font-weight: 500;
                 border-radius: 10px;
                 transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                border-radius: 10px;
 
                 &:hover {
-                    background: #41B883;
-                    color: white;
+                    background: rgb(0, 121, 129);
+                    color: rgb(0, 255, 200);
                     transform: scale(1.05);
 
+
                     &>svg path {
-                        fill: white;
+                        fill: rgb(0, 255, 200);
                     }
                 }
 
@@ -241,10 +256,19 @@ export default {
             }
 
             &-create-account {
-                color: #41B883;
+                color: #ffffff;
                 font-size: 24px;
                 font-weight: 500;
                 text-decoration: underline;
+                border-radius: 10px;
+                transition: background 0.2s ease-in-out;
+                padding: 10px;
+
+                &:hover {
+                    background: rgb(0, 121, 129);
+                    color: rgb(0, 255, 200);
+                    text-decoration: none;
+                }
             }
         }
 
@@ -261,11 +285,13 @@ export default {
     }
 
     .wrong {
-        border: 1px solid red;
+        border: 3px solid red;
+        transition: all 0.3s ease-out;
     }
 
     .correct {
-        border: 1px solid #41B883;
+        border: 3px solid #41B883;
+        transition: all 0.3s ease-in-out;
     }
 }
 </style>
