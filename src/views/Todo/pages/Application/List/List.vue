@@ -1,6 +1,5 @@
 <template>
     <template class="container">
-        <div>{{ this.$store.state.userData }}</div>
         <Lists></Lists>
         <Tasks></Tasks>
     </template>
@@ -18,16 +17,7 @@ export default {
     },
     data(){
         return {
-        }
-    },
-    methods: {
-    },
-    watch: {
-        getUserData: {
-            handler(val) {
-                console.log(val)
-            },
-            deep: true,
+            
         }
     },
     

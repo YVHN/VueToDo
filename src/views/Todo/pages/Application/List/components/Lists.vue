@@ -1,26 +1,23 @@
 <template>
     <div class="lists">
-        <p class="lists__heading">Списки</p>
-        <div class="lists__line"></div>
-        <div class="lists__list-item" :key="filter.id" v-for="filter in filterList" @click="addFilter(filter.id)">
-          {{ filter.name }}
-        </div>
-        <!-- <div class="lists__list">
+        <!-- Фильтры -->
+        <p class="lists__heading">Фильтры</p>
+        <div class="lists__list">
             <div class="lists__list-item" 
-            v-for="list in getDefaultLists"
-            :key="list.id"
-            @click="currentList = list.name, chooseList(currentList)"
-            :class="{active: currentList === list.name}">
-            <img :src="require(`${list.img}`)" alt="" class="lists__list-item-icon">
-            <span class="lists__list-item-text">{{ list.name }}</span></div>
-        </div> -->
+            v-for="filter in filterList"
+            :key="filter.id"
+            @click="currentList = filter.name, chooseList(currentList), addFilter(filter.id)"
+            :class="{active: currentList === filter.name}">
+            <span class="lists__list-item-text">{{ filter.name }}</span></div>
+        </div>
         <div class="lists__line"></div>
-        <!-- Пользователськие списки -->
+        <!-- Списки -->
+        <p class="lists__heading">Списки</p>
         <div class="lists__list">
             <div class="lists__list-item" 
             v-for="list in getUserData"
             :key="list.id"
-            @click="currentList = list.name, chooseList(list)"
+            @click="currentList = list.name, chooseList(list.name), addFilter('')"
             :class="{active: currentList === list.name}"><span class="lists__list-item-text">{{ list.name }}</span>
             <img src="../assets/icons/cancel.svg" alt="" 
             class="lists__list-item-delete"
@@ -46,17 +43,18 @@
                 newListName: "",
                 currentList: "",
                 firstlistId: 2,
+                //Список фильтров
                 filterList: [
                     {
-                        name: " Все задачи",
-                        id: 'ALL'
+                        name: "Все задачи",
+                        id: 'ALL',
                     },
                     {
-                        name: "completed",
+                        name: "Сделанное",
                         id: 'completed'
                     },
                     {
-                        name: "important",
+                        name: "Важное",
                         id: 'important'
                     },
                 ],
@@ -86,12 +84,12 @@
                 this.$store.commit('setFilterList', filter);
             },
             chooseList(list){
-                this.$store.commit('chooseList', list.name);
+                this.$store.commit('chooseList', list);
             },
         },
         computed: {
             getUserData(){
-            return this.$store.getters.getUserData;
+                return this.$store.getters.getUserData;
             }
         },
         
@@ -101,22 +99,27 @@
 <style lang="scss">
 .lists {
     font-family: 'Roboto';
-    background: rgb(53, 53, 53);
-    min-height: 91.5vh;
-    width: 300px;
+    background: rgb(0, 78, 83);
+    min-height: 91.2vh;
+    min-width: 300px;
+    max-width: 300px;
     padding: 30px 5px;
+    border-right: 5px solid rgb(0, 52, 73);
+    display: flex;
+    flex-direction: column;
 
     &__heading {
         text-align: center;
-        color: rgb(65, 184, 131);
+        color: rgb(0, 255, 200);
         font-size: 20px;
         font-weight: 700;
-
+        margin-bottom: 10px;
     }
 
     &__list {
         padding: 0px 35px;
         &-item {
+            cursor: pointer;
             font-size: 16px;
             white-space: nowrap;
             overflow: hidden;
@@ -149,14 +152,15 @@
     }
 
     &__line {
-        height: 1px;
-        background: rgb(121, 121, 121);
-        
+        margin: 10px 0px 20px 0px;
+        height: 2px;
+        background: rgb(255, 255, 255);
     }
     &__add-list{
         position: absolute;
         bottom: 20px;
         padding: 15px 35px;
+        left: 0px;
 
         &-input {
             color: white;
@@ -179,8 +183,7 @@
         }
     }
     .active {
-        color: rgb(65, 184, 131);
-        font-weight: 700;
+        color: rgb(0, 255, 200);
     }
 }
 </style>

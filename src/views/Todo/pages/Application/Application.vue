@@ -21,30 +21,9 @@ export default {
             //
             usersData: {
                 '1': {
-                    // defaultLists: {
-                    //     allTasks: {
-                    //         id: 1,
-                    //         name: "Задачи",
-                    //         img: "../assets/icons/completed.svg",
-                    //         tasks: []
-                    //     }
-                    // },
                     lists: [
                         {
                             id: 1,
-                            name: "Задачи",
-                            img: "../assets/icons/completed.svg",
-                            tasks: [
-                            {
-                                    id: 1,
-                                    name: "Помочь начальнику",
-                                    important: true,
-                                    completed: false,
-                                },
-                            ]
-                        },
-                        {
-                            id: 2,
                             name: 'Работа',
                             tasks: [
                                 {
@@ -56,13 +35,13 @@ export default {
                                 {
                                     id: 2,
                                     name: "Доделать отчёт",
-                                    important: true,
+                                    important: false,
                                     completed: false,
                                 },
                             ]
                         },
                         {
-                            id: 3,
+                            id: 2,
                             name: "Домашние дела",
                             tasks: [
                                 {
@@ -74,28 +53,11 @@ export default {
                                 {
                                     id: 2,
                                     name: "Погулять с собакой",
-                                    important: true,
-                                    completed: true,
+                                    important: false,
+                                    completed: false,
                                 }
                             ]
                         },
-                    ]
-                },
-                '2': {
-                    lists: [
-                        "Дела Максима",
-                    ],
-                    tasks: [
-                        {
-                            id: 1,
-                            name: "Сходить нахуй",
-                            status: false,
-                        },
-                        {
-                            id: 2,
-                            name: "Помыть член",
-                            status: false,
-                        }
                     ]
                 },
             },
@@ -105,6 +67,7 @@ export default {
     mounted() {
         this.userData = this.usersData[`${this.userId}`];
         this.$store.commit('sendUserData', this.userData);
+        console.log(this.$store.state.userData);
     }
 }
 </script>

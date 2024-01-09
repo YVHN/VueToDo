@@ -1,13 +1,19 @@
 <template>
     <div class="tasks">
-        <div class="tasks__list-name">{{ getList.name }}</div>
+        <Transition>
+            <span class="tasks__list-name">{{ $store.state.currentListName }}</span>
+        </Transition>
         <div class="tasks__list" v-if="getFiltres">
-            <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
+            <TransitionGroup>
+                <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
+            </TransitionGroup>
         </div>
         <div class="tasks__list" v-else>
-            <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" />
+            <TransitionGroup>
+                <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" @delete="deleteTask" />
+            </TransitionGroup>
         </div>
-        <div class="tasks__add-task">
+        <div class="tasks__add-task" v-if="getList.tasks">
             <input type="text" class="tasks__add-task-input" placeholder="Добавить задачу" v-model="newTaskName"
                 @keyup.enter="addTask">
             <img src="../assets/icons/add-green.svg" alt="" class="tasks__add-task-button">
@@ -16,7 +22,7 @@
 </template>
 
 <script>
-import TaskItem from './TaskItem'
+import TaskItem from './TaskItem/TaskItem.vue'
 export default {
     components: {
         TaskItem,
@@ -24,8 +30,7 @@ export default {
     data() {
         return {
             newTaskName: "",
-            tasks: "",
-            taskId : 0,
+            taskId: 0,
         }
     },
     methods: {
@@ -39,22 +44,17 @@ export default {
             this.$store.commit('addTask', newTask);
             this.newTaskName = "";
         },
-        deleteTask(deleted) {
-            this.$store.commit('deleteTask', deleted);
+        deleteTask(deletedId) {
+            console.log(deletedId);
+            this.$store.commit('deleteTask', deletedId);
         },
-    },
-    watch: {
-        filteredTasks(val) {
-            console.log(val)
-            console.log(this.allTasks)
-            console.log(this.getFiltres)
-        }
     },
     computed: {
-        getList(){
+        getList() {
             return this.$store.getters.getList;
         },
-        
+        // получение списка всех тасок
+
         allTasks() {
             let list = [];
             this.getUserData.forEach(element => {
@@ -63,16 +63,17 @@ export default {
             return list;
         },
         filteredTasks() {
-            if(this.getFiltres === 'ALL') {
+            if (this.getFiltres === 'ALL') {
                 return this.allTasks;
             }
             const result = this.allTasks;
             return result.filter(item => item[this.getFiltres])
         },
-        getFiltres(){
+        // Принимаю фильтр
+        getFiltres() {
             return this.$store.getters.getFiltres;
         },
-        getUserData(){
+        getUserData() {
             return this.$store.getters.getUserData;
         },
     },
@@ -81,71 +82,38 @@ export default {
 </script>
 
 <style lang="scss">
+.colors {
+    color: #41B883;
+    background: rgb(0, 121, 129);
+    color: rgb(0, 255, 200);
+    background: #00364b;
+    background: rgb(0, 93, 129);
+}
+
 .tasks {
     font-family: 'Roboto';
     padding: 50px;
-    border-right: 5px solid black;
-    border-left: 5px solid black;
     background: url('../assets/img/background.jpg') no-repeat;
     background-size: cover;
     height: auto;
     width: 100%;
 
     &__list-name {
-        color: rgb(65, 184, 131);
+        background-color: rgba(#41b883, 0.8);
+        color: rgb(255, 255, 255);
         font-size: 40px;
         font-weight: 700;
-    }
-
-    &__list {
-        margin-top: 40px;
-
-        &-item {
-            margin-bottom: 10px;
-            border-radius: 15px;
-            color: white;
-            padding: 20px;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: space-between;
-
-            &-wrapper {
-                display: flex;
-            }
-
-            &-status {
-                margin-right: 10px;
-                width: 30px;
-            }
-
-            &-text {
-                font-size: 22px;
-            }
-
-            &-delete {
-                align-items: end;
-                width: 22px;
-                height: 22px;
-                transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                cursor: pointer;
-
-                &:hover {
-                    transform: scale(1.15);
-                }
-            }
-        }
     }
 
     &__add-task {
         border-radius: 20px;
         position: absolute;
         bottom: 20px;
-        background: black;
+        background: rgba(0, 0, 0, 0.8);
         padding: 15px 15px;
 
         &-input {
-            color: rgb(65, 184, 131);
+            color: rgb(0, 255, 200);
             padding-left: 20px;
             background: none;
             font-size: 16px;
@@ -168,5 +136,15 @@ export default {
             }
         }
     }
+}
+
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.3s ease-in-out;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
 }
 </style>
