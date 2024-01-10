@@ -61,6 +61,7 @@ export default {
       }
 
       &-actions {
+        user-select: none;
         display: flex;
 
         &-delete {

@@ -14,8 +14,8 @@ import List from '../views/Todo/pages/Application/List/List.vue';
 
 const routes = [
   {
-
     path: '/',
+    redirect: { path: "/todo/login" },
     name: 'welcome',
     component: Welcome
   },
