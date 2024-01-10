@@ -3,16 +3,17 @@
         <Transition>
             <span class="tasks__list-name">{{ $store.state.currentListName }}</span>
         </Transition>
-        <div class="tasks__list" v-if="getFiltres">
-            <TransitionGroup>
-                <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
-            </TransitionGroup>
-        </div>
-        <div class="tasks__list" v-else>
-            <TransitionGroup>
-                <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" @delete="deleteTask" />
-            </TransitionGroup>
-        </div>
+        <Transition mode="out-in">
+            <div :key="$store.state.currentListName">
+                <TransitionGroup class="tasks__list" v-if="getFiltres" tag='div'  mode="out-in">
+                    <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
+                </TransitionGroup>
+                <TransitionGroup mode="out-in" class="tasks__list" v-else>
+                    <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" @delete="deleteTask" />
+                </TransitionGroup>
+            </div>
+        </Transition>
+
         <div class="tasks__add-task" v-if="getList.tasks">
             <input type="text" class="tasks__add-task-input" placeholder="Добавить задачу" v-model="newTaskName"
                 @keyup.enter="addTask">
@@ -54,6 +55,7 @@ export default {
             return this.$store.getters.getList;
         },
         // получение списка всех тасок
+
         allTasks() {
             let list = [];
             this.getUserData.forEach(element => {

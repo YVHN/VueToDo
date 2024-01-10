@@ -45,15 +45,19 @@ const store = createStore({
         sendUserData(state, payload){
             state.userData = payload.lists;
         },
+        toggleCompleted(state, payload){
+           
+        },
     },
     getters: {
         getUserData(state){
             return state.userData;
         },
-        // Отдаю фильтр
+       
         getFiltres(state) {
             return state.filters;
         },
+
         getList(state){
             const currentList = state.userData.find(userDataItem => userDataItem.name === state.currentListName);
             return currentList || {};

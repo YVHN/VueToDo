@@ -2,11 +2,11 @@
   <div class="tasks__list-item">
     <div class="tasks__list-item-wrapper">
       <input type="checkbox" :checked="task.completed" class="tasks__list-item-status"
-        @click="task.completed = !task.completed">
+        @click="() => toggleCompleted(task)">
       <p class="tasks__list-item-text">{{ task.name }}</p>
     </div>
     <div class="tasks__list-item-actions">
-      <ImportantButton :class="{ important: task.important }" @click.stop="task.important = !task.important"
+      <ImportantButton :class="{ important: task.important }" @click.stop="() => task.important = !task.important"
         class="tasks__list-item-actions-important"></ImportantButton>
       <img src="../../assets/icons/cancel.svg" alt="" class="tasks__list-item-actions-delete"
         @click="deleteTask(task.id)">
@@ -27,6 +27,9 @@ export default {
   methods: {
     deleteTask(deletedId) {
       this.$emit('delete', deletedId);
+    },
+    toggleCompleted(task) {
+      this.$store.commit('toggleCompleted', task);
     }
   }
 }

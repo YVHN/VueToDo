@@ -1,7 +1,7 @@
 <template>
     <template class="container">
-        <Lists></Lists>
-        <Tasks></Tasks>
+        <Lists />
+        <Tasks />
     </template>
 </template>
 
