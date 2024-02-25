@@ -10,19 +10,16 @@ import ResetPassword from '../views/Todo/pages/ResetPassword.vue';
 import SignUp from '../views/Todo/pages/SignUp.vue';
 // ToDo
 import Todo from '../views/Todo/Todo.vue';
-// Welcome
-import Welcome from '../views/Todo/pages/Welcome.vue';
 
 const routes = [
   {
     path: '/',
-    name: 'welcome',
-    component: Welcome
+    redirect: '/todo/login',
   },
   {
     path: '/todo',
     name: 'todo',
-    component: Todo,
+    redirect: '/todo/login',
     children: [ 
       {
         path: 'login',
@@ -48,11 +45,14 @@ const routes = [
             path: 'list',
             name: 'list',
             component: List,
-          }
+          },
         ]
       },
-
     ]
+  },
+  {
+    path: '/:pathName(.*)',
+    redirect: '/todo/login',
   },
 ]
 

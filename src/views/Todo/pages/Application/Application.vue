@@ -67,7 +67,6 @@ export default {
     mounted() {
         this.userData = this.usersData[`${this.userId}`];
         this.$store.commit('sendUserData', this.userData);
-        console.log(this.$store.state.userData);
     }
 }
 </script>

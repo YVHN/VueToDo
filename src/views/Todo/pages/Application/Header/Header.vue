@@ -4,7 +4,10 @@
             <img class="ToDo__header-logo" src="../../../assets/logo/logo.svg" />
             <p class="ToDo__header-welcome">С возвращением, <span>{{ `${this.$route.params.user}!` }}</span></p>
             <div class="ToDo__header-search">
-                <input type="text" class="ToDo__header-search-input" placeholder="Поиск">
+                <input type="text" class="ToDo__header-search-input" 
+                placeholder="Поиск" 
+                v-model="searchFilter"
+                @input="sendSearchData">
             </div>
             <nav class="ToDo__header-navigation">
                 <ul class="ToDo__header-navigation-list">
@@ -19,6 +22,18 @@
 </template>
 
 <script>
+    export default {
+        data(){
+            return{
+                searchFilter : "",
+            }
+        },
+        methods: {
+            sendSearchData(){
+                this.$store.commit('setSearch', this.searchFilter);
+            }
+        }
+    }
 </script>
 
 <style lang="scss">

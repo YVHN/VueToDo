@@ -3,6 +3,7 @@ import { createStore } from 'vuex';
 const store = createStore({
     state() {
         return {
+            searchInput: "",
             currentListName: "",
             userData: [],
             filters: "",
@@ -11,6 +12,9 @@ const store = createStore({
         }
     },
     mutations: {
+        setSearch(state, payload){
+            state.searchInput = payload;
+        },
         // Получение массив листов
         chooseList(state, payload){
             state.currentListName = payload;
@@ -45,15 +49,13 @@ const store = createStore({
         sendUserData(state, payload){
             state.userData = payload.lists;
         },
-        toggleCompleted(state, payload){
-           
-        },
+    //     toggleCompleted(state, payload){
+    //     },
     },
     getters: {
         getUserData(state){
             return state.userData;
         },
-       
         getFiltres(state) {
             return state.filters;
         },
@@ -61,6 +63,12 @@ const store = createStore({
         getList(state){
             const currentList = state.userData.find(userDataItem => userDataItem.name === state.currentListName);
             return currentList || {};
+        },
+        getListName(state){
+            return state.currentListName;
+        },
+        getSearchData(state){
+            return state.searchInput;
         }
     }
 });

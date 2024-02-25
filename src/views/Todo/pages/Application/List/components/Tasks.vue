@@ -1,24 +1,41 @@
 <template>
     <div class="tasks">
         <Transition>
-            <span class="tasks__list-name">{{ $store.state.currentListName }}</span>
+            <span class="tasks__list-name" v-show="!getSearchData">{{ getListName }}</span>
         </Transition>
         <Transition mode="out-in">
             <div :key="$store.state.currentListName">
-                <TransitionGroup class="tasks__list" v-if="getFiltres" tag='div'  mode="out-in">
-                    <TaskItem v-for="task in  filteredTasks" :key="task.id" :task="task" />
+                <!-- Результат поиска -->
+                <TransitionGroup class="tasks__list" v-if="getSearchData" tag='div' mode="out-in">
+                    <TaskItem v-for="task in searchTasks" :class="{completedTask: task.completed}" :key="task.id" :task="task" @delete="deleteTask"/>
                 </TransitionGroup>
-                <TransitionGroup mode="out-in" class="tasks__list" v-else>
-                    <TaskItem v-for="task in getList.tasks" :key="task.id" :task="task" @delete="deleteTask" />
-                </TransitionGroup>
+                <Transition tag="div" v-if="!getSearchData" mode="out-in">
+                    <!-- Отфильтрованные задачи -->
+                    <TransitionGroup class="tasks__list" v-if="getFiltres" tag='div' mode="out-in">
+                        <TaskItem v-for="task in  filteredTasks" :class="{completedTask: task.completed}" :key="task.id" :task="task"/>
+                    </TransitionGroup>
+                    <TransitionGroup tag='div' class="tasks__list" v-else mode="out-in">
+                        <!-- Задачи списка -->
+                        <TaskItem v-for="task in listTasks" :class="{completedTask: task.completed}" :key="task.id" :task="task" @delete="deleteTask" />
+                        <!-- Сделанные задачи -->
+                        <div class="tasks__list-completed" v-if="$store.state.currentListName">
+                            <TransitionGroup tag="div" class="tasks__list-completed-list">
+                                <p class="tasks__list-completed-heading" v-if="completedTasks.length">{{ `Сделанные задачи
+                                    ${completedTasks.length} шт.` }}</p>
+                                <TaskItem :class="{completedTask: task.completed}" v-for="task in completedTasks" :key="task.id" :task="task" @delete="deleteTask" />
+                            </TransitionGroup>
+                        </div>
+                    </TransitionGroup>
+                </Transition>
             </div>
         </Transition>
-
-        <div class="tasks__add-task" v-if="getList.tasks">
-            <input type="text" class="tasks__add-task-input" placeholder="Добавить задачу" v-model="newTaskName"
-                @keyup.enter="addTask">
-            <img src="../assets/icons/add-green.svg" alt="" class="tasks__add-task-button">
-        </div>
+        <Transition>
+            <div class="tasks__add-task" v-if="getList.tasks">
+                <input type="text" class="tasks__add-task-input" placeholder="Добавить задачу" v-model="newTaskName"
+                    @keyup.enter="addTask">
+                <img src="../assets/icons/add-green.svg" alt="" class="tasks__add-task-button">
+            </div>
+        </Transition>
     </div>
 </template>
 
@@ -31,13 +48,14 @@ export default {
     data() {
         return {
             newTaskName: "",
-            taskId: 0,
+            taskId: 20,
         }
     },
     methods: {
         addTask() {
+            this.taskId++;
             const newTask = {
-                id: this.taskId + 1,
+                id: this.taskId,
                 name: this.newTaskName,
                 important: false,
                 completed: false,
@@ -45,17 +63,39 @@ export default {
             this.$store.commit('addTask', newTask);
             this.newTaskName = "";
         },
+        // передаю Id таски
         deleteTask(deletedId) {
             console.log(deletedId);
             this.$store.commit('deleteTask', deletedId);
-        },
+        }
     },
     computed: {
+        getListName(){
+            return this.$store.getters.getListName;
+        },
+        getSearchData() {
+            return this.$store.getters.getSearchData;
+        },
+        searchTasks() {
+            const filtered = this.allTasks.filter(task => task.name.toLowerCase().includes(this.getSearchData.toLowerCase()));
+            return filtered;
+        },
         getList() {
             return this.$store.getters.getList;
         },
         // получение списка всех тасок
-
+        completedTasks() {
+            if (Object.keys(this.getList).length) {
+                const filtered = this.getList.tasks.filter(task => task.completed);
+                return filtered;
+            }
+        },
+        listTasks() {
+            if (Object.keys(this.getList).length) {
+                const filtered = this.getList.tasks.filter(task => !task.completed);
+                return filtered;
+            }
+        },
         allTasks() {
             let list = [];
             this.getUserData.forEach(element => {
@@ -98,12 +138,68 @@ export default {
     background-size: cover;
     height: auto;
     width: 100%;
+    max-height: 91.2vh;
 
-    &__list-name {
-        background-color: rgba(#41b883, 0.8);
-        color: rgb(255, 255, 255);
-        font-size: 40px;
-        font-weight: 700;
+    &__list {
+        padding: 0px 40px;
+        margin-top: 40px;
+        max-height: 71vh;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgb(0, 206, 161);
+            border-radius: 20px;
+            border: 4px solid #00364b;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: #00364b;
+            border-radius: 20px;
+        }
+
+        &-name {
+            background-color: rgba(#41b883, 0.8);
+            color: rgb(255, 255, 255);
+            font-size: 40px;
+            font-weight: 700;
+        }
+    }
+
+    &__list-completed {
+        padding: 0px 60px;
+        margin-top: 40px;
+        max-height: 71vh;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgb(0, 206, 161);
+            border-radius: 20px;
+            border: 4px solid #00364b;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: #00364b;
+            border-radius: 20px;
+        }
+
+        &-heading {
+            text-align: center;
+            border-radius: 20px;
+            padding: 10px 0px;
+            margin-bottom: 20px;
+            background: rgba(black, 0.6);
+            color: rgb(255, 255, 255);
+            font-size: 28px;
+            font-weight: 700;
+        }
     }
 
     &__add-task {
@@ -135,6 +231,14 @@ export default {
             &:hover {
                 transform: scale(1.2);
             }
+        }
+    }
+    .completedTask{
+        background-color: #00532e;
+        opacity: 0.7;
+        text-decoration: line-through;
+        .tasks__list-item-actions{
+            display: none;
         }
     }
 }
